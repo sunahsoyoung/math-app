@@ -529,13 +529,15 @@ function LockScreen({ onUnlock }) {
       background:"linear-gradient(160deg,#f0fce8,#e8f5e0,#f5fcf0)",
       display:"flex", flexDirection:"column",
       alignItems:"center", justifyContent:"center",
-      padding:"24px", fontFamily:"'Gaegu',sans-serif",
-      boxSizing:"border-box", width:"100%",
+      fontFamily:"'Gaegu',sans-serif",
+      boxSizing:"border-box",
+      position:"fixed", inset:0,
+      overflowY:"auto",
     }}>
       <div style={{
         background:"white", borderRadius:"clamp(24px,5vw,36px)",
         padding:"clamp(32px,7vw,52px) clamp(24px,5vw,40px)",
-        width:"100%", maxWidth:"420px",
+        width:"calc(100% - 48px)", maxWidth:"420px",
         boxSizing:"border-box",
         border:"2.5px solid #E8DFD0",
         boxShadow:"0 10px 0 #E8DFD0",
@@ -564,7 +566,9 @@ function LockScreen({ onUnlock }) {
           onKeyDown={handleKey}
           autoFocus
           style={{
+            display:"block",
             width:"100%",
+            margin:"0 auto",
             fontFamily:"'Jua',sans-serif",
             fontSize:"clamp(20px,4vw,26px)",
             textAlign:"center",
@@ -573,6 +577,7 @@ function LockScreen({ onUnlock }) {
             padding:"clamp(12px,2.5vw,16px)",
             background: error ? "#FFF5F5" : "#FDFAF4",
             color:"#2A2018", outline:"none",
+            boxSizing:"border-box",
             animation: shake ? "shake .4s" : "none",
             transition:"border-color .2s, background .2s"
           }}
