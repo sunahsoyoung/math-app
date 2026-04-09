@@ -501,7 +501,7 @@ body { background: #FDFAF4; font-family: 'Gaegu', sans-serif; touch-action: mani
 `;
 
 // ── 🔑 비밀번호 설정 (여기서 변경하세요) ────────────────────────────────
-const ACCESS_PASSWORD = "수다방1234";
+const ACCESS_PASSWORD = "0502";
 
 // ── LOCK SCREEN ───────────────────────────────────────────────────────────
 function LockScreen({ onUnlock }) {
@@ -525,16 +525,18 @@ function LockScreen({ onUnlock }) {
 
   return (
     <div style={{
-      minHeight:"100vh", minHeight:"100dvh",
+      minHeight:"100vh",
       background:"linear-gradient(160deg,#f0fce8,#e8f5e0,#f5fcf0)",
       display:"flex", flexDirection:"column",
       alignItems:"center", justifyContent:"center",
-      padding:"24px", fontFamily:"'Gaegu',sans-serif"
+      padding:"24px", fontFamily:"'Gaegu',sans-serif",
+      boxSizing:"border-box", width:"100%",
     }}>
       <div style={{
         background:"white", borderRadius:"clamp(24px,5vw,36px)",
         padding:"clamp(32px,7vw,52px) clamp(24px,5vw,40px)",
         width:"100%", maxWidth:"420px",
+        boxSizing:"border-box",
         border:"2.5px solid #E8DFD0",
         boxShadow:"0 10px 0 #E8DFD0",
         textAlign:"center", display:"flex",
