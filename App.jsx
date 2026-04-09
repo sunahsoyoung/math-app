@@ -500,6 +500,115 @@ body { background: #FDFAF4; font-family: 'Gaegu', sans-serif; touch-action: mani
 }
 `;
 
+// ── 🔑 비밀번호 설정 (여기서 변경하세요) ────────────────────────────────
+const ACCESS_PASSWORD = "수다방1234";
+
+// ── LOCK SCREEN ───────────────────────────────────────────────────────────
+function LockScreen({ onUnlock }) {
+  const [pw, setPw]         = useState("");
+  const [error, setError]   = useState(false);
+  const [shake, setShake]   = useState(false);
+
+  const tryUnlock = () => {
+    if (pw === ACCESS_PASSWORD) {
+      sessionStorage.setItem("unlocked", "1");
+      onUnlock();
+    } else {
+      setError(true);
+      setShake(true);
+      setPw("");
+      setTimeout(() => setShake(false), 500);
+    }
+  };
+
+  const handleKey = (e) => { if (e.key === "Enter") tryUnlock(); };
+
+  return (
+    <div style={{
+      minHeight:"100vh", minHeight:"100dvh",
+      background:"linear-gradient(160deg,#f0fce8,#e8f5e0,#f5fcf0)",
+      display:"flex", flexDirection:"column",
+      alignItems:"center", justifyContent:"center",
+      padding:"24px", fontFamily:"'Gaegu',sans-serif"
+    }}>
+      <div style={{
+        background:"white", borderRadius:"clamp(24px,5vw,36px)",
+        padding:"clamp(32px,7vw,52px) clamp(24px,5vw,40px)",
+        width:"100%", maxWidth:"420px",
+        border:"2.5px solid #E8DFD0",
+        boxShadow:"0 10px 0 #E8DFD0",
+        textAlign:"center", display:"flex",
+        flexDirection:"column", gap:"20px"
+      }}>
+        <div style={{ fontSize:"clamp(56px,14vw,80px)", animation:"sway 3s ease-in-out infinite" }}>🌳</div>
+        <div>
+          <div style={{
+            fontFamily:"'Jua',sans-serif",
+            fontSize:"clamp(20px,4.5vw,28px)",
+            color:"#2A2018", marginBottom:"6px"
+          }}>
+            ✨ 반짝반짝 연산수다방
+          </div>
+          <div style={{ fontSize:"clamp(14px,3vw,17px)", color:"#7A6E60" }}>
+            이용권 비밀번호를 입력해주세요 🔑
+          </div>
+        </div>
+
+        <input
+          type="password"
+          placeholder="비밀번호 입력"
+          value={pw}
+          onChange={e => { setPw(e.target.value); setError(false); }}
+          onKeyDown={handleKey}
+          autoFocus
+          style={{
+            width:"100%",
+            fontFamily:"'Jua',sans-serif",
+            fontSize:"clamp(20px,4vw,26px)",
+            textAlign:"center",
+            border:`3px solid ${error ? "#e53935" : "#E8DFD0"}`,
+            borderRadius:"clamp(14px,3vw,20px)",
+            padding:"clamp(12px,2.5vw,16px)",
+            background: error ? "#FFF5F5" : "#FDFAF4",
+            color:"#2A2018", outline:"none",
+            animation: shake ? "shake .4s" : "none",
+            transition:"border-color .2s, background .2s"
+          }}
+        />
+
+        {error && (
+          <div style={{
+            color:"#e53935", fontFamily:"'Jua',sans-serif",
+            fontSize:"clamp(14px,3vw,17px)", marginTop:"-8px"
+          }}>
+            비밀번호가 틀렸어요 😢
+          </div>
+        )}
+
+        <button
+          onClick={tryUnlock}
+          style={{
+            background:"#3DAA6E", color:"white", border:"none",
+            borderRadius:"clamp(14px,3vw,20px)",
+            padding:"clamp(14px,3vw,18px)",
+            fontFamily:"'Jua',sans-serif",
+            fontSize:"clamp(17px,3.5vw,22px)",
+            cursor:"pointer",
+            boxShadow:"0 6px 0 #2A8050",
+            transition:"all .15s"
+          }}
+        >
+          🚀 입장하기
+        </button>
+
+        <div style={{ fontSize:"clamp(12px,2.5vw,14px)", color:"#bbb", marginTop:"-8px" }}>
+          크몽에서 구매하신 분께 비밀번호를 안내드려요
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── NUMPAD COMPONENT ─────────────────────────────────────────────────────
 function NumPad({ value, onChange, onSubmit }) {
   const press = (k) => {
@@ -526,6 +635,16 @@ function NumPad({ value, onChange, onSubmit }) {
 
 // ── MAIN ─────────────────────────────────────────────────────────────────
 export default function App() {
+  const [unlocked, setUnlocked] = useState(
+    () => sessionStorage.getItem("unlocked") === "1"
+  );
+
+  if (!unlocked) return <LockScreen onUnlock={() => setUnlocked(true)} />;
+
+  return <MainApp />;
+}
+
+function MainApp() {
   const [partData, setPartData] = useState(() =>
     Object.fromEntries(PARTS.map(p => [p.id, { correct: 0, wrong: 0, wrongList: [], done: false }]))
   );
